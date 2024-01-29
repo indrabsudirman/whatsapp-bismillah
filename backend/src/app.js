@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import cookieParser from "cookie-parser";
+import compression from "compression";
 
 //dotEnv config
 dotenv.config();
@@ -22,6 +25,15 @@ app.use(express.json());
 
 //parse JSON req body
 app.use(express.urlencoded({ extended: true }));
+
+//sanitize request data
+app.use(mongoSanitize());
+
+//enable cookie parser
+app.use(cookieParser());
+
+//gzip compression
+app.use(compression());
 
 app.get("/", (req, res) => {
   res.send("Hello from server");
