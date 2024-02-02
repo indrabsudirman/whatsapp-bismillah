@@ -1,6 +1,7 @@
 export const register = async (req, res, next) => {
   try {
-    res.send(req.body);
+    const { name, email, password, picture, status } = req.body;
+    console.log(name, email, password, picture, status);
   } catch (error) {
     next(error);
   }
