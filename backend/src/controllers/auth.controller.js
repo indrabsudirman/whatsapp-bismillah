@@ -1,6 +1,8 @@
 import { createUser } from "../services/auth.service.js";
-import { generateToken } from "../services/token.service.js";
+import { generateToken, verifyToken } from "../services/token.service.js";
 import { signUser } from "../services/auth.service.js";
+import { findUser } from "../services/user.service.js";
+import createHttpError from "http-errors";
 
 export const register = async (req, res, next) => {
   const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
@@ -123,7 +125,31 @@ export const logout = async (req, res, next) => {
   }
 };
 export const refreshToken = async (req, res, next) => {
+  const { REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET } = process.env;
   try {
+    const refresh_token = req.cookies.refreshtoken;
+    if (!refresh_token) throw createHttpError.Unauthorized("Please login.");
+    const check = await verifyToken(refresh_token, REFRESH_TOKEN_SECRET);
+    const user = await findUser(check.userId);
+    const access_token = await generateToken(
+      {
+        userId: user._id,
+        phoneNumber: user.phoneNumber,
+      },
+      "1d",
+      ACCESS_TOKEN_SECRET
+    );
+    res.json({
+      access_token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        picture: user.picture,
+        status: user.status,
+      },
+    });
   } catch (error) {
     next(error);
   }
