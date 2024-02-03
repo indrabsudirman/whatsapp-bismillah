@@ -1,6 +1,7 @@
 import createHttpError from "http-errors";
 import validator from "validator";
 import { UserModel } from "../models/index.js";
+import bcrypt from "bcrypt";
 
 //env data
 const { DEFAULT_PICTURE, DEFAULT_STATUS } = process.env;
@@ -107,6 +108,27 @@ export const createUser = async (userData) => {
     picture: picture || DEFAULT_PICTURE,
     status: status || DEFAULT_STATUS,
   }).save();
+
+  return user;
+};
+
+export const signUser = async (emailOrPhoneNumber, password) => {
+  //check if user exist by email or phone number
+  let user;
+  if (validator.isNumeric(emailOrPhoneNumber)) {
+    console.log("PhoneNumber : ", emailOrPhoneNumber);
+    user = await UserModel.findOne({ phoneNumber: emailOrPhoneNumber }).lean();
+  } else {
+    console.log("Email : ", emailOrPhoneNumber);
+    user = await UserModel.findOne({
+      email: emailOrPhoneNumber.toLowerCase(),
+    }).lean();
+  }
+  if (!user) throw createHttpError.NotFound("Invalid Credentials");
+
+  //check password matches
+  let passwordMatches = await bcrypt.compare(password, user.password);
+  if (!passwordMatches) throw createHttpError.NotFound("Invalid Credentials");
 
   return user;
 };
