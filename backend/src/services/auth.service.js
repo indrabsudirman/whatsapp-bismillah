@@ -6,10 +6,18 @@ import { UserModel } from "../models/index.js";
 const { DEFAULT_PICTURE, DEFAULT_STATUS } = process.env;
 
 export const createUser = async (userData) => {
-  const { name, email, password, confirmPassword, picture, status } = userData;
+  const {
+    name,
+    email,
+    phoneNumber,
+    password,
+    confirmPassword,
+    picture,
+    status,
+  } = userData;
 
   //check if field are empty
-  if (!name || !email || !password || !confirmPassword) {
+  if (!name || !email || !phoneNumber || !password || !confirmPassword) {
     throw createHttpError.BadRequest("Please fill are fields.");
   }
 
@@ -51,6 +59,27 @@ export const createUser = async (userData) => {
     throw createHttpError.Conflict(`Your email ${email} is already exist`);
   }
 
+  //check valid phone number
+  if (
+    !validator.isNumeric(phoneNumber) ||
+    !validator.isLength(phoneNumber, {
+      min: 10,
+      max: 13,
+    })
+  ) {
+    throw createHttpError.BadRequest(
+      `Please provide a valid phone number, min 10 max 13 digits. Current is ${phoneNumber.length} digits`
+    );
+  }
+
+  //check if user phone number already exist
+  const checkPhoneNumberlDB = await UserModel.findOne({ phoneNumber });
+  if (checkPhoneNumberlDB) {
+    throw createHttpError.Conflict(
+      `Your phone number ${phoneNumber} is already exist`
+    );
+  }
+
   //check password length
   if (
     !validator.isLength(password, {
@@ -73,6 +102,7 @@ export const createUser = async (userData) => {
   const user = new UserModel({
     name,
     email,
+    phoneNumber,
     password,
     picture: picture || DEFAULT_PICTURE,
     status: status || DEFAULT_STATUS,
