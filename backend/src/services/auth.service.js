@@ -26,11 +26,11 @@ export const createUser = async (userData) => {
   if (
     !validator.isLength(name, {
       min: 5,
-      max: 56,
+      max: 25,
     })
   ) {
     throw createHttpError.BadRequest(
-      `Please make sure your name length between 5 - 56 characters. Your current name' length is ${name.length} characters`
+      `Please make sure your name length between 5 - 25 characters. Your current name' length is ${name.length} characters`
     );
   }
 
