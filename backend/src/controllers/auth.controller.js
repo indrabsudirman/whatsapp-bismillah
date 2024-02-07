@@ -52,7 +52,6 @@ export const register = async (req, res, next) => {
     console.table({ access_token, refresh_token });
     res.json({
       message: "register success.",
-      access_token,
       user: {
         _id: newUser._id,
         name: newUser.name,
@@ -60,6 +59,7 @@ export const register = async (req, res, next) => {
         phoneNumber: newUser.phoneNumber,
         picture: newUser.picture,
         status: newUser.status,
+        access_token,
       },
     });
   } catch (error) {
@@ -98,7 +98,6 @@ export const login = async (req, res, next) => {
     console.table({ access_token, refresh_token });
     res.json({
       message: "login success.",
-      access_token,
       user: {
         _id: user._id,
         name: user.name,
@@ -106,6 +105,7 @@ export const login = async (req, res, next) => {
         phoneNumber: user.phoneNumber,
         picture: user.picture,
         status: user.status,
+        access_token,
       },
     });
   } catch (error) {
@@ -140,7 +140,6 @@ export const refreshToken = async (req, res, next) => {
       ACCESS_TOKEN_SECRET
     );
     res.json({
-      access_token,
       user: {
         _id: user._id,
         name: user.name,
@@ -148,6 +147,7 @@ export const refreshToken = async (req, res, next) => {
         phoneNumber: user.phoneNumber,
         picture: user.picture,
         status: user.status,
+        access_token,
       },
     });
   } catch (error) {
