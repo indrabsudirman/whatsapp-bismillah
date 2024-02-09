@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { DateTime } from "luxon";
 
 const userSchema = mongoose.Schema(
   {
@@ -39,7 +40,10 @@ const userSchema = mongoose.Schema(
   },
   {
     collection: "users",
-    timestamps: true,
+    // timestamps: true,
+    timestamps: {
+      currentTime: () => DateTime.local().setZone("Asia/Jakarta"),
+    },
   }
 );
 
