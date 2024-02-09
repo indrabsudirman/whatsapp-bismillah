@@ -124,11 +124,12 @@ export const signUser = async (emailOrPhoneNumber, password) => {
       email: emailOrPhoneNumber.toLowerCase(),
     }).lean();
   }
-  if (!user) throw createHttpError.NotFound("Invalid Credentials");
+  if (!user) throw createHttpError.Unauthorized("Invalid Credentials");
 
   //check password matches
   let passwordMatches = await bcrypt.compare(password, user.password);
-  if (!passwordMatches) throw createHttpError.NotFound("Invalid Credentials");
+  if (!passwordMatches)
+    throw createHttpError.Unauthorized("Invalid Credentials");
 
   return user;
 };
