@@ -1,10 +1,11 @@
 import { mongoose } from "mongoose";
+import { DateTime } from "luxon";
 const { ObjectId } = mongoose.Schema.Types;
 const conversationSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Conversation is required."],
+      required: [true, "Conversation name is required."],
       trim: true,
     },
     isGroup: {

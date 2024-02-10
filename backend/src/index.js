@@ -30,11 +30,11 @@ mongoose
 let server;
 
 //log the ENV
-console.log(process.env.NODE_ENV);
+logger.info(process.env.NODE_ENV);
 
 server = app.listen(PORT, () => {
   logger.info(`App is litening at port : ${PORT}.`);
-  console.log("process id is ", process.pid);
+  // console.log("process id is ", process.pid);
 });
 
 //handle server error
