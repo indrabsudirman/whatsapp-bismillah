@@ -4,7 +4,7 @@ import { createMessage, populateMessage } from "../services/message.service.js";
 
 export const sendMessage = async (req, res, next) => {
   try {
-    const { user_id } = req.user.userId;
+    const user_id = req.user.userId;
     console.log("user_id", user_id);
     console.log("user_id di reg", req.user.userId);
     const { message, convo_id, files } = req.body;
