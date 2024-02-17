@@ -1,5 +1,6 @@
 import createHttpError from "http-errors";
 import { UserModel } from "../models/index.js";
+import logger from "../configs/logger.config.js";
 
 export const findUser = async (userId) => {
   const user = await UserModel.findById(userId);
@@ -7,13 +8,15 @@ export const findUser = async (userId) => {
   return user;
 };
 
-export const searchUsers = async (keyword) => {
+export const searchUsers = async (keyword, userId) => {
   const users = await UserModel.find({
     $or: [
       { name: { $regex: keyword, $options: "i" } },
       { email: { $regex: keyword, $options: "i" } },
       { phoneNumber: { $regex: keyword, $options: "i" } },
     ],
+  }).find({
+    _id: { $ne: userId },
   });
   return users;
 };
