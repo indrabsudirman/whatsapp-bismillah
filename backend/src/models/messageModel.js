@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import moment from "moment";
+import "moment-timezone";
 import { DateTime } from "luxon";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -21,9 +23,16 @@ const messageSchema = mongoose.Schema(
   },
   {
     collection: "messages",
-    timestamps: {
-      currentTime: () => DateTime.local().setZone("Asia/Jakarta"),
-    },
+    timestamps: true,
+    // timestamps: {
+    //   currentTime: () => {
+    //     let date = new Date();
+    //     let newDate = new Date(
+    //       date.getTime() + date.getTimezoneOffset() * 60 * 1000 * -1
+    //     );
+    //     return newDate;
+    //   },
+    // },
   }
 );
 
