@@ -11,3 +11,13 @@ Copy the `.env-example` and update the values based on your own local:
 7. CLIENT_ENDPOINT=http://localhost:3000
 
 Please noted on the point number 2. You could update the `yourUserNameMongoDB`, `yourPasswordMongoDB` and `yourDBName` you should update based on your own. The point number 2. I used Mongo DB Docker.
+
+Next run the command below:
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
